@@ -1,12 +1,13 @@
 from typing import Any
-
 from pynput import keyboard
+from collections import deque
 
 class DriverKeyboard:
     def __init__(self):
+        # lista de teclas apertads
         self.pressed_keys = set()
+        self.buffer = []
         self.listener = None
-
         self.special_keys.caps_lock = keyboard.Key.caps_lock
 
     def ligar(self):

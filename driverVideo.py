@@ -1,9 +1,12 @@
 import curses
 from typing import Tuple
 
-class Window:
+
+class Win:
     def __init__(self, height: int, width: int, x: int, y: int) -> None:
-        self.screen = curses.newwin(height, width, x, y)
+        self.screen = curses.newwin(height, width, y, x)
+        self.buffer = list()
+    
     def draw(self, draws: list | Tuple) -> None:
         # Instância de Draw: [x, y, str]
         for x, y, string in draws:
@@ -16,7 +19,7 @@ class DriverVideo:
         self.screen = None
 
     # Liga a "tela"
-    def ligar(self) -> None:
+    def turn_on(self) -> None:
         self.screen = curses.initscr()
         curses.noecho()
         curses.cbreak()
@@ -26,17 +29,18 @@ class DriverVideo:
         self.screen.clear()
 
     # Volta o terminal para o normal
-    def desligar(self) -> None:
+    def turn_off(self) -> None:
         if self.screen:
             self.screen.keypad(False)
             curses.nocbreak()
             curses.echo()
             curses.endwin()
 
+
     # Desenha na tela o que o kernel pedir na tela
     def draw(self, draws: list | Tuple) -> None:
         # Instância de Draw: [x, y, str]
-        self.screen.clear()
+
         for x, y, string in draws:
             self.screen.addstr(y, x, string)
         self.screen.refresh()
